@@ -1,5 +1,7 @@
 package com.ptt.mvc.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -17,9 +19,11 @@ public class Employee {
     @Column
     private String department;
 
+    @JsonIgnore
     @ManyToMany
     private List<Project> project;
 
+    @JsonIgnore
     @OneToMany
     private List<Task> listTask;
 
@@ -83,6 +87,7 @@ public class Employee {
     public void setDepartment(String department) {
         this.department = department;
     }
+
     public List<Project> getProject() {
         return project;
     }

@@ -1,7 +1,9 @@
 package com.ptt.mvc.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 @Entity
@@ -21,8 +23,11 @@ public class Project {
     @Column
     private int number;
 
+    @JsonIgnore
     @ManyToMany
     private List<Employee> employees;
+
+    @JsonIgnore
     @OneToMany
     private List<Task> listTask;
 
