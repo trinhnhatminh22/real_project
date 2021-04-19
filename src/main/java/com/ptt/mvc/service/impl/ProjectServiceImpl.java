@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Transient;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,26 +47,26 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transient
     public void deleteProject(int id) {
         Optional<Project> project = projectRepository.findById(id);
-        if (project.isPresent()) {
-            List<Task> listTask = project.get().getListTask();
-            List<Employee> listEmployee = project.get().getEmployees();
-            if(listEmployee.size()>0){
-                for (Employee employee:listEmployee) {
-                    employee.getProject().remove(project.get());
-                    for (int i = 0; i < employee.getListTask().size(); i++) {
-                        if(employee.getListTask().get(i).getProject().getId() == id){
-                            employee.getListTask().remove(i);
-                        }
-                    }
-                }
+        if(project.isPresent()){
+            Set<Task> listTask = taskRepository.findAllByProjectId(project.get().getId());
+            Set<Employee> listEmployee = project.get().getEmployees();
+            for (Task task:listTask) {
+                task.setEmployee(null);
+                task.setProject(null);
             }
-            employeeRepository.saveAll(listEmployee);
-            taskRepository.deleteAll(listTask);
+            for(Employee employee:listEmployee){
+                employee.getListTask().removeAll(listTask);
+                employee.getProject().remove(project.get());
+            }
             projectRepository.delete(project.get());
-
+            employeeRepository.saveAll(listEmployee);
+            taskRepository.saveAll(listTask);
+            taskRepository.deleteAll(listTask);
         }
+
     }
 
     @Override

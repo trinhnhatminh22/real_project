@@ -1,10 +1,9 @@
 package com.ptt.mvc.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 
@@ -23,19 +22,16 @@ public class Project {
     @Column
     private int number;
 
-    @JsonIgnore
     @ManyToMany
-    private List<Employee> employees;
+    private Set<Employee> employees = new HashSet<Employee>();
 
-    @JsonIgnore
     @OneToMany
-    private List<Task> listTask;
-
+    private Set<Task> listTask = new HashSet<Task>();
 
     public Project() {
     }
 
-    public Project(Integer id, String name, String customerName, String incharge, Date start, int number, List<Employee> employees, List<Task> listTask) {
+    public Project(Integer id, String name, String customerName, String incharge, Date start, int number, Set<Employee> employees, Set<Task> listTask) {
         this.id = id;
         this.name = name;
         this.customerName = customerName;
@@ -103,19 +99,19 @@ public class Project {
         this.incharge = incharge;
     }
 
-    public List<Employee> getEmployees() {
+    public Set<Employee> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(List<Employee> employees) {
+    public void setEmployees(Set<Employee> employees) {
         this.employees = employees;
     }
 
-    public List<Task> getListTask() {
+    public Set<Task> getListTask() {
         return listTask;
     }
 
-    public void setListTask(List<Task> listTask) {
+    public void setListTask(Set<Task> listTask) {
         this.listTask = listTask;
     }
 }

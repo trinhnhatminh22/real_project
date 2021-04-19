@@ -16,11 +16,9 @@ public class Task {
     @Column
     private int status;
 
-    @JsonIgnore
     @ManyToOne
     private Employee employee;
 
-    @JsonIgnore
     @ManyToOne
     private Project project;
 

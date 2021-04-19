@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -76,18 +78,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void deleteEmployee(int id) {
         Optional<Employee> employee = employeeRepository.findById(id);
         if(employee.isPresent()){
-            List<Project> listProject = employee.get().getProject();
-            List<Task> listTask = employee.get().getListTask();
-            for (Project project:listProject) {
+            Set<Project> listProject = employee.get().getProject();
+            Set<Task> listTask = taskRepository.findAllByEmployeeId(id);
+            for (Task task:listTask) {
+                task.setEmployee(null);
+            };
+            for (Project project: listProject){
                 project.getEmployees().remove(employee.get());
             }
-            for (Task task:listTask){
-                task.setEmployee(null);
-            }
-            employee.get().getListTask().clear();
+            employee.get().getListTask().removeAll(listTask);
+            employee.get().getProject().removeAll(listProject);
             employeeRepository.save(employee.get());
-            projectRepository.saveAll(listProject);
             taskRepository.saveAll(listTask);
+            projectRepository.saveAll(listProject);
             employeeRepository.delete(employee.get());
         }
     }

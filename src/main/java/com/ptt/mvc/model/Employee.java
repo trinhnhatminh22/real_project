@@ -3,7 +3,9 @@ package com.ptt.mvc.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Employee {
@@ -19,18 +21,16 @@ public class Employee {
     @Column
     private String department;
 
-    @JsonIgnore
     @ManyToMany
-    private List<Project> project;
+    private Set<Project> project = new HashSet<Project>();
 
-    @JsonIgnore
     @OneToMany
-    private List<Task> listTask;
+    private Set<Task> listTask = new HashSet<Task>();
 
     public Employee() {
     }
 
-    public Employee(Integer id, String name, int age, String address, String department, List<Project> project, List<Task> listTask) {
+    public Employee(Integer id, String name, int age, String address, String department, Set<Project> project, Set<Task> listTask) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -88,19 +88,19 @@ public class Employee {
         this.department = department;
     }
 
-    public List<Project> getProject() {
+    public Set<Project> getProject() {
         return project;
     }
 
-    public void setProject(List<Project> project) {
+    public void setProject(Set<Project> project) {
         this.project = project;
     }
 
-    public List<Task> getListTask() {
+    public Set<Task> getListTask() {
         return listTask;
     }
 
-    public void setListTask(List<Task> listTask) {
+    public void setListTask(Set<Task> listTask) {
         this.listTask = listTask;
     }
 }

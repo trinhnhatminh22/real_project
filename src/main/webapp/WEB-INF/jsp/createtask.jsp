@@ -10,7 +10,7 @@
     <title>Document</title>
 </head>
 <body>
-<form action="/createTask" method="post">
+<form action="/createTask" method="post" >
     <input type="hidden" name="projectId" value="${projectId}">
     <label for="fname">Task Name:</label><br>
     <input type="text" id="fname" name="name" placeholder="Input task name"><br>
